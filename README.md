@@ -27,6 +27,8 @@ and read the [intro](https://libfpga.com/blog/myhdl-intro).
 | `bin2gray` / `gray2bin` | binary ↔ Gray converters |
 | `lfsr` | maximal-length Fibonacci LFSR |
 | `mac` | signed multiply-accumulate (the neural-net atom) |
+| `uart_tx` / `uart_rx` | UART transmitter / receiver, 8N1 |
+| `spi_master` | SPI master, mode 0, full duplex |
 
 ## Use it
 
@@ -53,9 +55,10 @@ non-empty.
 
 ## Roadmap
 
-- **v0.1** — the blocks above.
-- **v0.2** — UART, SPI, pulse synchronizer, arbiter; a co-simulation check
-  that the *generated Verilog* passes the same testbench as the MyHDL model.
+- **v0.1 + v0.2 — shipped.** The blocks above (UART tx/rx and SPI added
+  in v0.2, with a tx->rx loopback and a behavioral-slave test).
+- **v0.3** — pulse synchronizer, arbiter, I2C; a co-simulation check that
+  the *generated Verilog* passes the same testbench as the MyHDL model.
 - Parity with the [Verilog library](https://github.com/libfpga/libfpga)
   where it makes sense.
 

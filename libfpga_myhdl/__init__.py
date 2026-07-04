@@ -7,7 +7,9 @@ verification and the conversion checks.
 from .cdc import sync_bit, reset_sync
 from .fifo import fifo_sync
 from .math import bin2gray, gray2bin, lfsr, mac
+from .serial import uart_tx, uart_rx, spi_master
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"
 __all__ = ["sync_bit", "reset_sync", "fifo_sync",
-           "bin2gray", "gray2bin", "lfsr", "mac"]
+           "bin2gray", "gray2bin", "lfsr", "mac",
+           "uart_tx", "uart_rx", "spi_master"]
