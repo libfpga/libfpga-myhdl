@@ -69,3 +69,58 @@ def test_reset_sync_async_assert_sync_deassert():
         return dut, clk_gen, stim
 
     tb().run_sim()
+
+
+def test_pulse_sync_crosses_each_pulse():
+    """Each source-domain pulse must produce exactly one destination
+    pulse (dual clock: dst faster than src)."""
+    from libfpga_myhdl import pulse_sync
+
+    @block
+    def tb():
+        clk_src = Signal(bool(0)); clk_dst = Signal(bool(0))
+        rst_dst = ResetSignal(0, active=1, isasync=False)
+        pin = Signal(bool(0)); pout = Signal(bool(0))
+        dut = pulse_sync(clk_src, clk_dst, rst_dst, pin, pout)
+
+        @always(delay(17))
+        def src_clk():
+            clk_src.next = not clk_src
+
+        @always(delay(5))
+        def dst_clk():
+            clk_dst.next = not clk_dst
+
+        got = [0]
+
+        @instance
+        def count_out():
+            while True:
+                yield clk_dst.posedge
+                yield delay(1)
+                if pout:
+                    got[0] += 1
+
+        @instance
+        def stim():
+            rst_dst.next = 1
+            yield clk_dst.posedge; yield clk_dst.posedge
+            rst_dst.next = 0
+            sent = 0
+            for _ in range(5):
+                yield clk_src.negedge
+                pin.next = 1
+                yield clk_src.posedge
+                yield clk_src.negedge
+                pin.next = 0
+                sent += 1
+                # space pulses so the dst sees each toggle
+                for _ in range(6):
+                    yield clk_src.posedge
+            for _ in range(20):
+                yield clk_dst.posedge
+            assert got[0] == sent, f"sent {sent} pulses, dst saw {got[0]}"
+            raise StopSimulation
+        return dut, src_clk, dst_clk, count_out, stim
+
+    tb().run_sim()

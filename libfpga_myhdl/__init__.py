@@ -8,8 +8,11 @@ from .cdc import sync_bit, reset_sync
 from .fifo import fifo_sync
 from .math import bin2gray, gray2bin, lfsr, mac
 from .serial import uart_tx, uart_rx, spi_master
+from .cdc import pulse_sync
+from .stream import arbiter_rr
 
-__version__ = "0.2.0"
+__version__ = "0.3.0"
 __all__ = ["sync_bit", "reset_sync", "fifo_sync",
            "bin2gray", "gray2bin", "lfsr", "mac",
-           "uart_tx", "uart_rx", "spi_master"]
+           "uart_tx", "uart_rx", "spi_master",
+           "pulse_sync", "arbiter_rr"]

@@ -29,6 +29,8 @@ and read the [intro](https://libfpga.com/blog/myhdl-intro).
 | `mac` | signed multiply-accumulate (the neural-net atom) |
 | `uart_tx` / `uart_rx` | UART transmitter / receiver, 8N1 |
 | `spi_master` | SPI master, mode 0, full duplex |
+| `pulse_sync` | single-cycle pulse across clock domains |
+| `arbiter_rr` | round-robin arbiter (one-hot, fair) |
 
 ## Use it
 
@@ -46,19 +48,26 @@ fifo.convert(hdl="Verilog")     # -> fifo_sync.v, ready for synthesis
 
 ```sh
 pip install myhdl pytest
-pytest                # simulate every block + prove each converts & compiles
+pytest                # simulate + convert + compile + co-simulate
 ```
 
-`tests/test_convert.py` converts every module to Verilog and VHDL and
-compiles the Verilog with Icarus — the generated RTL is real, not just
-non-empty.
+Three levels of assurance, all in CI:
+
+1. **Simulation** — each block runs in Python against a self-checking
+   testbench (`tests/test_*.py`).
+2. **Conversion + compile** — every block converts to Verilog *and* VHDL,
+   and the Verilog is compiled with Icarus (`tests/test_convert.py`).
+3. **Co-simulation** — the strongest check: the *generated Verilog* is run
+   through Icarus and driven by the MyHDL testbench, asserting it behaves
+   **identically to the model** on the same stimulus (`tests/test_cosim.py`,
+   via MyHDL's VPI bridge). If conversion ever introduced a semantic gap,
+   this fails.
 
 ## Roadmap
 
-- **v0.1 + v0.2 — shipped.** The blocks above (UART tx/rx and SPI added
-  in v0.2, with a tx->rx loopback and a behavioral-slave test).
-- **v0.3** — pulse synchronizer, arbiter, I2C; a co-simulation check that
-  the *generated Verilog* passes the same testbench as the MyHDL model.
+- **v0.1 – v0.3 — shipped.** The blocks above, plus (v0.3) the
+  co-simulation check.
+- **v0.4** — I2C master, width converters, more cosim coverage.
 - Parity with the [Verilog library](https://github.com/libfpga/libfpga)
   where it makes sense.
 

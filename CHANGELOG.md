@@ -1,5 +1,13 @@
 # Changelog
 
+## v0.3.0 — 2026-07-04
+
+- `pulse_sync` (single-cycle pulse CDC) and `arbiter_rr` (round-robin
+  arbiter).
+- **Co-simulation checks** (`tests/test_cosim.py`): the generated Verilog
+  is run through Icarus and driven by the MyHDL testbench, proving it
+  behaves identically to the model. Uses MyHDL's VPI bridge; CI builds it.
+
 ## v0.2.0 — 2026-07-04
 
 - `uart_tx`, `uart_rx` (8N1) and `spi_master` (mode 0, full duplex).

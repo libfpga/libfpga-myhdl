@@ -1,5 +1,6 @@
 """Clock-domain-crossing primitives."""
-from myhdl import block, always_seq, always, always_comb, Signal, intbv, modbv, ResetSignal
+from myhdl import (block, always_seq, always, always_comb, Signal,
+                   intbv, modbv, concat, ResetSignal)
 
 
 @block
@@ -36,4 +37,30 @@ def reset_sync(clk, rst_async, rst_sync, STAGES=2):
     def out():
         rst_sync.next = ff[STAGES - 1]
     return seq, out
+
+
+
+@block
+def pulse_sync(clk_src, clk_dst, rst_dst, pulse_in, pulse_out):
+    """Single-cycle pulse crossing from the source domain to clk_dst.
+    Toggle-based: pulse_in flips a flag in the source domain; the flag is
+    double-synchronized into clk_dst and edge-detected to regenerate a
+    one-cycle pulse. pulse_in must be one src-clock wide and pulses must
+    be spaced enough for the destination to see each toggle."""
+    flag = Signal(bool(0))
+    sync = Signal(intbv(0)[3:])       # 2-flop sync + 1 for edge detect
+
+    @always(clk_src.posedge)
+    def src():
+        if pulse_in:
+            flag.next = not flag
+
+    @always_seq(clk_dst.posedge, reset=rst_dst)
+    def dst():
+        sync.next = concat(sync[2:0], flag)
+
+    @always_comb
+    def out():
+        pulse_out.next = sync[2] ^ sync[1]     # edge in the synced flag
+    return src, dst, out
 
