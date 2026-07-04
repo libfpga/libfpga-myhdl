@@ -1,0 +1,11 @@
+These two C files (myhdl.c, myhdl_table.c) are the Icarus Verilog VPI
+bridge from the MyHDL project (https://www.myhdl.org/), vendored here so
+the co-simulation tests build reliably regardless of where `pip install
+myhdl` places its data files.
+
+They are part of MyHDL and remain licensed under the GNU LGPL v2.1
+(the license of MyHDL), NOT the MIT license of the rest of this
+repository. Copyright (c) Jan Decaluwe and MyHDL contributors.
+
+Source: myhdl/cosimulation/icarus/ in the MyHDL distribution.
+Used unmodified, only for building the test-time VPI module.

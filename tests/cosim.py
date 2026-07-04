@@ -12,15 +12,18 @@ import shutil
 import subprocess
 import tempfile
 
-_VPI_SRC = "/usr/share/myhdl/cosimulation/icarus"
+# The VPI C sources are vendored (tests/cosim_vpi/, LGPL — see NOTICE) so
+# co-simulation builds reliably regardless of where pip put myhdl's data.
+_VPI_SRC = os.path.join(os.path.dirname(__file__), "cosim_vpi")
 _vpi_path = None
 
 
 def have_cosim():
-    """True if we can build/He VPI (needs iverilog-vpi + the myhdl sources)."""
+    """True if we can build the VPI. Source is vendored, so we only need
+    Icarus's VPI toolchain (iverilog-vpi ships in the iverilog package)."""
     return (shutil.which("iverilog-vpi") is not None
-            and os.path.isdir(_VPI_SRC)
-            and shutil.which("iverilog") is not None)
+            and shutil.which("iverilog") is not None
+            and os.path.isfile(os.path.join(_VPI_SRC, "myhdl.c")))
 
 
 def vpi():

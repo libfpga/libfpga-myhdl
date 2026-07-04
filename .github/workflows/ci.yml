@@ -18,6 +18,8 @@ jobs:
           python -m pip install -e .
           sudo apt-get update -qq && sudo apt-get install -y -qq iverilog
       - name: Assert co-simulation is available (must not silently skip)
-        run: python -c "from tests import cosim; assert cosim.have_cosim(), 'cosim VPI unavailable in CI'; print('cosim source:', cosim._VPI_SRC)"
+        run: |
+          which iverilog iverilog-vpi
+          python -c "from tests import cosim; assert cosim.have_cosim(), 'cosim unavailable'; print('cosim source:', cosim._VPI_SRC)"
       - name: Simulate + convert/compile + co-simulation checks
         run: pytest -q -rs
