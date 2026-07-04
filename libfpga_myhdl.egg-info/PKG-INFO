@@ -1,0 +1,12 @@
+Metadata-Version: 2.4
+Name: libfpga-myhdl
+Version: 0.1.0
+Summary: Verified FPGA building blocks in MyHDL
+Author: Antonio Roldao, Ph.D.
+License: MIT
+Project-URL: Homepage, https://libfpga.com
+Project-URL: Repository, https://github.com/libfpga/libfpga-myhdl
+Requires-Python: >=3.9
+License-File: LICENSE
+Requires-Dist: myhdl>=0.11
+Dynamic: license-file
