@@ -1,17 +1,34 @@
-# LibFPGA registry manifest for libfpga-myhdl
-# https://libfpga.com/cores/libfpga-myhdl
 libfpga_claim: lfpga-verify-da1c52ce9d2b9f409f4282bb55da6057
-
 name: libfpga-myhdl
 tagline: The same building blocks in MyHDL, hardware described in Python.
 category: library
 license: MIT
-languages: [myhdl, python]
-interfaces: [uart, spi]
-targets: [device-agnostic]
+languages:
+- myhdl
+- python
+interfaces:
+- uart
+- spi
+targets:
+- device-agnostic
 maturity: beta
-tags: [cdc, fifo, uart, spi, lfsr, mac, arbiter, python, cosimulation]
-description: >
-  The Python companion to libfpga: verified building blocks in MyHDL that
-  simulate in pure Python, convert to Verilog and VHDL, and are co-simulated
-  so the generated RTL provably matches the model.
+tags:
+- cdc
+- fifo
+- uart
+- spi
+- lfsr
+- mac
+- arbiter
+- python
+- cosimulation
+description: 'The Python companion to libfpga: verified building blocks in MyHDL that
+  simulate in pure Python, convert to Verilog and VHDL, and are co-simulated so the
+  generated RTL provably matches the model.
+
+  '
+top: verilog/lfpga_mac.v
+top_module: lfpga_mac
+files:
+- verilog/lfpga_mac.v
+testbench: verilog/tb_mac.v
