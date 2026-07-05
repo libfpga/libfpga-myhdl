@@ -7,3 +7,6 @@ build/
 *.vpi
 *.o
 cosim/
+
+# committed generated RTL for registry verification
+!verilog/*.v
